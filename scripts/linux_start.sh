@@ -11,7 +11,7 @@ validate_linux
 mkdir /home/user/.vnc &> /dev/null
 cat "$script_dir/vncpasswd" | vncpasswd -f > /home/user/.vnc/passwd
 
-vncserver -DisconnectClients -NeverShared -nocursor -geometry $(tr -d "\n\r\t " < "$script_dir/vnc_resolution") -SecurityTypes VncAuth -PasswordFile /home/user/.vnc/passwd -localhost no -verbose -fg -RawKeyboard -RemapKeys "0xffe9->0xff7e,0xffe7->0xff7e" -- LXDE
+vncserver -DisconnectClients -NeverShared -nocursor -geometry $(tr -d "\n\r\t " < "$script_dir/vnc_resolution") -dpi 192 -SecurityTypes VncAuth -PasswordFile /home/user/.vnc/passwd -localhost no -verbose -fg -RawKeyboard -RemapKeys "0xffe9->0xff7e,0xffe7->0xff7e" -- LXDE
 # explanation (see also TigerVNC manual):
 #
 # -DisconnectClients -NeverShared:

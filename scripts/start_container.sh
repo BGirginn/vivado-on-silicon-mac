@@ -26,12 +26,18 @@ fi
 killall xvcd > /dev/null 2>&1
 
 # run container
-docker run --init --rm --name vivado_container --mount type=bind,source="$script_dir/..",target="/home/user" -p 127.0.0.1:5901:5901 --platform linux/amd64 x64-linux sudo -H -u user bash /home/user/scripts/linux_start.sh &
+mkdir -p "$HOME/.claude"
+docker run --init --rm --name vivado_container --mount type=bind,source="$script_dir/..",target="/home/user" --mount type=bind,source="$HOME/.claude",target="/home/user/.claude" -p 127.0.0.1:5901:5901 --platform linux/amd64 x64-linux sudo -H -u user bash /home/user/scripts/linux_start.sh &
 f_echo "Started container"
 sleep 7
 f_echo "Starting VNC viewer"
-vncpass=$( tr -d "\n\r\t " < "$script_dir/vncpasswd" )
-osascript -e "tell application \"Screen Sharing\" to GetURL \"vnc://user:$vncpass@localhost:5901\""
+if open -a "TigerVNC" "vnc://localhost:5901" 2>/dev/null; then
+    :
+else
+    vncpass=$(tr -d "\n\r\t " < "$script_dir/vncpasswd")
+    open "vnc://user:$vncpass@localhost:5901"
+fi
+f_echo "Open a new ghostty tab and run: zsh $script_dir/attach.sh"
 f_echo "Running xvcd for USB forwarding..."
 # while vivado_container is running
 while [[ $(docker ps) == *vivado_container* ]]

@@ -1,0 +1,46 @@
+# ~/.bashrc for the Vivado Docker container
+# Source this file with: exec bash --rcfile /home/user/scripts/container_bashrc
+
+# PATH (~/.local/bin contains claude, eza, bat, rg, fzf, zoxide)
+export PATH="$HOME/.local/bin:$PATH"
+
+
+# Vivado environment
+# 2025.1+: Xilinx/VERSION/Vivado/settings64.sh
+# ~2024.1:  Xilinx/Vivado/VERSION/settings64.sh
+for settings in /home/user/Xilinx/*/Vivado/settings64.sh \
+                /home/user/Xilinx/Vivado/*/settings64.sh; do
+    [ -f "$settings" ] && source "$settings" && break
+done
+
+# ── History ───────────────────────────────────────────────────────────────────
+HISTSIZE=50000
+HISTFILESIZE=50000
+HISTCONTROL=ignoredups:erasedups
+shopt -s histappend
+
+# ── Prompt (git-aware, anime emoticon) ───────────────────────────────────────
+source /usr/lib/git-core/git-sh-prompt 2>/dev/null || true
+GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWUNTRACKEDFILES=1
+ok_yuno="\[\e[33m\]✘╹◡╹✘\[\e[0m\]"
+bad_yuno="\[\e[31m\]✘>﹏<✘\[\e[0m\]"
+PROMPT_COMMAND='
+    _last=$?
+    vcs=$(__git_ps1 " \[\e[33m\][%s]\[\e[0m\]" 2>/dev/null)
+    [ $_last -eq 0 ] && _yuno="$ok_yuno" || _yuno="$bad_yuno"
+    PS1="\n\[\e[32;1m\]\t\[\e[0m\] \[\e[36;1m\]\u@\h\[\e[0m\]${vcs} \[\e[32;1m\]\w\[\e[0m\]\n${_yuno} \[\e[33;1m\]\\$\[\e[0m\] "'
+
+# ── Aliases ───────────────────────────────────────────────────────────────────
+command -v eza &>/dev/null && alias ls='eza --icons' && alias ll='eza --icons -lh' \
+    && alias la='eza --icons -lah' && alias lt='eza --icons --tree'
+command -v bat &>/dev/null && alias cat='bat'
+command -v rg  &>/dev/null && alias grep='rg'
+alias reload='source /home/user/scripts/container_bashrc'
+alias vivado-gui='vivado -nolog -nojournal &'
+alias vivado-tcl='vivado -mode tcl'
+
+# ── Tool integrations ─────────────────────────────────────────────────────────
+export BAT_THEME="Monokai Extended"
+command -v fzf    &>/dev/null && eval "$(fzf --bash)"
+command -v zoxide &>/dev/null && eval "$(zoxide init bash)"
