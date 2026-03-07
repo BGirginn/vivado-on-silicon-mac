@@ -37,7 +37,7 @@ else
     vncpass=$(tr -d "\n\r\t " < "$script_dir/vncpasswd")
     open "vnc://user:$vncpass@localhost:5901"
 fi
-f_echo "Open a new ghostty tab and run: zsh $script_dir/attach.sh"
+f_echo "Open a new terminal tab and run: zsh $script_dir/attach.sh"
 f_echo "Running xvcd for USB forwarding..."
 # while vivado_container is running
 while [[ $(docker ps) == *vivado_container* ]]
