@@ -3,4 +3,4 @@
 	url = https://github.com/Digilent/vivado-boards
 [submodule "vivado-library"]
 	path = vivado-library
-	url = git@github.com:Digilent/vivado-library.git
+	url = https://github.com/Digilent/vivado-library

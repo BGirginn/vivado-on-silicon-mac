@@ -53,8 +53,6 @@ Digilent の FPGA ボード（Arty、Nexys、Basys など）を使う場合:
 git submodule update --init
 ```
 
-> **Note**: `vivado-library` サブモジュールは SSH URL を使用しています。GitHub の SSH キーを設定していない場合は `vivado-boards` のみを使用するか、SSH キーを設定してください。
-
 ### 2-3. TigerVNC Viewer のインストール
 
 ```zsh
@@ -77,8 +75,7 @@ bash scripts/gen_image.sh
 ```bash
 claude
 ```
-
-認証情報は `/home/user/.claude/`（= macOS の `~/.claude/`）に保存されます。コンテナを再起動しても `~/.claude/` がマウントされているため、再認証は不要です。
+認証が完了すると、macOS 側の `~/.claude/` がコンテナ内の `/home/user/.claude/` にマウントされ、コンテナ内からも Claude Code を利用できるようになります。
 
 ---
 
@@ -128,8 +125,7 @@ Digilent サブモジュールが存在する場合、ボードファイルを V
 
 1. TigerVNC Viewer を開く
 2. **Options → Display** タブ:
-   - **Remote desktop scaling**: `Remote resizes desktop`（または `Scale to window`）
-3. 全画面モード: `F8` → `Full screen`（または View メニュー）
+   - **Display mode**: `Full screen on current monitor`
 
 VNC 接続先: `localhost:5901`
 
@@ -206,10 +202,6 @@ claude          # インタラクティブセッション
 claude "質問"   # 単発の質問
 claude --help   # ヘルプ
 ```
-
-### 認証の仕組み
-
-Mac の `~/.claude/` がコンテナの `/home/user/.claude/` にマウントされます。`claude setup-token` で取得した認証情報がそのまま利用されます。
 
 ### コンテナ内での活用例
 
